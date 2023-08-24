@@ -3,10 +3,10 @@ pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
     ((mkosi.overrideAttrs (_: rec {
       src = fetchFromGitHub {
-        owner = "systemd";
+        owner = "malt3";
         repo = "mkosi";
-        rev = "aff069b5a2c3eec676f436129944fa8b323df0d9";
-        hash = "sha256-dcYdCK1+HN/p5cvViKxEFecMZ0DigMz3uXuZic6dwLA=";
+        rev = "00073162dc1c8911cc41eba14e3fd31ed33e85ed";
+        hash = "sha256-F5sDaRpneqb+RrTHUO8mOriqySpHA8Ays5UYlgGcX1c=";
       };
     })).override
       { withQemu = true; })

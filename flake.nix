@@ -15,6 +15,7 @@
     {
       devShells."${system}" = {
         mkosiFedora = import ./shells/fedora.nix { inherit pkgs; };
+        mkosiUbuntu = import ./shells/ubuntu.nix { inherit pkgs; };
       };
 
     };

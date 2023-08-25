@@ -53,3 +53,6 @@ function waitForTask() {
     done
 
 }
+
+aws ec2 register-image --region eu-central-1 --name paul-nix --root-device-name /dev/xvda --block-device-mappings DeviceName=/dev/xvda,Ebs={SnapshotId=snap-0db3947a2c7a02561} DeviceName=/dev/xvdf,Ebs={VolumeSize=100}
+aws ec2 run-instances --image-id ami-xxxxxxxx --count 1 --instance-type t2.micro --key-name MyKeyPair --security-group-ids sg-903004f8 --subnet-id subnet-6e7f829e

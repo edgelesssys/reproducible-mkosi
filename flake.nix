@@ -2,19 +2,50 @@
   description = "Build fedora image with mkosi";
 
   inputs = {
-    nixpkgs.url = "github:katexochen/nixpkgs/working";
+    nixpkgsWorking = {
+      url = "github:katexochen/nixpkgs/working";
+    };
+    nixpkgsUnstable = {
+      url = "github:nixos/nixpkgs/nixos-unstable";
+    };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgsUnstable";
+    };
+    nixos-anywhere = {
+      url = "github:numtide/nixos-anywhere";
+      inputs.nixpkgs.follows = "nixpkgsUnstable";
+    };
+    srvos = {
+      url = "github:numtide/srvos";
+      inputs.nixpkgs.follows = "nixpkgsUnstable";
+    };
+    nixpkgsSrvos = {
+      follows = "srvos/nixpkgs";
+    };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgsUnstable";
+    };
   };
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self
+    , nixpkgsWorking
+    , nixpkgsUnstable
+    , nixos-generators
+    , nixos-anywhere
+    , srvos
+    , disko
+    }:
     let
       system = "x86_64-linux";
 
-      pkgs = import nixpkgs {
-        inherit system;
-      };
+      pkgsWorking = import nixpkgsWorking { inherit system; };
+      pkgsUnstable = import nixpkgsUnstable { inherit system; };
 
-      mkosiDev = (pkgs.mkosi.overrideAttrs (_: rec {
-        src = pkgs.fetchFromGitHub {
+      mkosiDev = (pkgsWorking.mkosi.overrideAttrs (_: rec {
+        src = pkgsWorking.fetchFromGitHub {
           owner = "katexochen";
           repo = "mkosi";
           rev = "e7b6792076cd45a83f103c1df3b0b1f6d31e529c";
@@ -24,15 +55,32 @@
         # withQemu = true;
       };
 
-      tools = import ./tools/default.nix { inherit pkgs; };
+      tools = import ./tools/default.nix { inherit pkgsWorking; };
     in
     {
       devShells.${system} = {
-        mkosiFedora = import ./shells/fedora.nix { inherit pkgs mkosiDev tools; };
-        mkosiUbuntu = import ./shells/ubuntu.nix { inherit pkgs mkosiDev tools; };
-        mkosiDev = import ./shells/mkosi-dev.nix { inherit pkgs; };
+        mkosiFedora = import ./shells/fedora.nix { pkgs = pkgsWorking; inherit mkosiDev tools; };
+        mkosiUbuntu = import ./shells/ubuntu.nix { pkgs = pkgsWorking; inherit mkosiDev tools; };
+        mkosiDev = import ./shells/mkosi-dev.nix { pkgs = pkgsWorking; };
       };
 
-      formatter.${system} = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
+      nixosConfigurations.remoteBuilder = nixpkgsUnstable.lib.nixosSystem {
+        inherit system;
+        modules = [
+          srvos.nixosModules.hardware-amazon
+          srvos.nixosModules.server
+          srvos.nixosModules.roles-nix-remote-builder
+          nixos-generators.nixosModules.all-formats
+          ./systems/builder-config.nix
+          {
+            roles.nix-remote-builder.schedulerPublicKeys = [
+              "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBLRbdboacxCiIarRD/mdJUoZINJXF/YbsTELlcZNf04 katexochen@remoteBuilder"
+            ];
+          }
+        ];
+        specialArgs = { pkgs = pkgsUnstable; inherit nixos-generators; };
+      };
+
+      formatter.${system} = nixpkgsUnstable.legacyPackages.${system}.nixpkgs-fmt;
     };
 }

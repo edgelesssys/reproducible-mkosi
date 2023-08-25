@@ -52,7 +52,7 @@ function extract_partition() {
 
 function main() {
     local uuids
-    case "${1}" in
+    case "${1-}" in
         verity)
             uuids="${root_verity_partition_UUIDs}"
             ;;
@@ -75,7 +75,7 @@ function main() {
             uuids="${other_data_partition}"
             ;;
         *)
-            echo "Usage: $0 [verity|root] <image> <target>"
+            echo "Usage: $0 <partition-type> <image> <target>"
             exit 1
             ;;
     esac

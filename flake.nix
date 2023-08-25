@@ -8,6 +8,7 @@
   outputs = { self, nixpkgs }:
     let
       system = "x86_64-linux";
+
       pkgs = import nixpkgs {
         inherit system;
       };
@@ -20,11 +21,13 @@
           hash = "sha256-2Z9AmltoIBW1qQvzlBo+iNfq+zb9UMUqy3Qkm6TMuhM=";
         };
       })).override { withQemu = true; };
+
+      tools = import ./tools/default.nix { inherit pkgs; };
     in
     {
       devShells."${system}" = {
-        mkosiFedora = import ./shells/fedora.nix { inherit pkgs mkosiDev; };
-        mkosiUbuntu = import ./shells/ubuntu.nix { inherit pkgs mkosiDev; };
+        mkosiFedora = import ./shells/fedora.nix { inherit pkgs mkosiDev tools; };
+        mkosiUbuntu = import ./shells/ubuntu.nix { inherit pkgs mkosiDev tools; };
         mkosiDev = import ./shells/mkosi-dev.nix { inherit pkgs; };
       };
 

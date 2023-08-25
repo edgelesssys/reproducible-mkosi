@@ -1,4 +1,4 @@
-{ pkgs, mkosiDev }:
+{ pkgs, mkosiDev, tools }:
 pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
     # package management
@@ -11,5 +11,5 @@ pkgs.mkShell {
     dosfstools # mkfs.vfat
     cryptsetup # dm-verity
     util-linux # flock
-  ] ++ [ mkosiDev ];
+  ] ++ [ mkosiDev tools.extract ];
 }

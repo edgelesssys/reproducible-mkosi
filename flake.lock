@@ -202,6 +202,10 @@
         "disko": "disko",
         "nixos-anywhere": "nixos-anywhere",
         "nixos-generators": "nixos-generators",
+        "nixpkgsSrvos": [
+          "srvos",
+          "nixpkgs"
+        ],
         "nixpkgsUnstable": "nixpkgsUnstable",
         "nixpkgsWorking": "nixpkgsWorking",
         "srvos": "srvos"

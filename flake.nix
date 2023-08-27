@@ -33,6 +33,7 @@
     { self
     , nixpkgsWorking
     , nixpkgsUnstable
+    , nixpkgsSrvos
     , nixos-generators
     , nixos-anywhere
     , srvos
@@ -55,7 +56,7 @@
         # withQemu = true;
       };
 
-      tools = import ./tools/default.nix { inherit pkgsWorking; };
+      tools = import ./tools/default.nix { pkgs = pkgsWorking; };
     in
     {
       devShells.${system} = {

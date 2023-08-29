@@ -9,6 +9,7 @@ pkgs.mkShell {
     btrfs-progs # mkfs.btrfs
     squashfsTools # mksquashfs
     dosfstools # mkfs.vfat
+    mtools # mcopy
     cryptsetup # dm-verity
     util-linux # flock
   ] ++ [ mkosiDev tools.extract ];

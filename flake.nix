@@ -17,10 +17,12 @@
         src = pkgs.fetchFromGitHub {
           owner = "katexochen";
           repo = "mkosi";
-          rev = "6e61f2808cdec7f4620f9735ebbbc1ad12a1e74d";
-          hash = "sha256-2Z9AmltoIBW1qQvzlBo+iNfq+zb9UMUqy3Qkm6TMuhM=";
+          rev = "e7b6792076cd45a83f103c1df3b0b1f6d31e529c";
+          hash = "sha256-xc55is5Q0/m606Bf1P4GjUl0Vg3LMLrSC75mmo5thSs=";
         };
-      })).override { withQemu = true; };
+      })).override {
+        # withQemu = true;
+      };
 
       tools = import ./tools/default.nix { inherit pkgs; };
     in

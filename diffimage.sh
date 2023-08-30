@@ -10,9 +10,9 @@ fi
 
 rm -rf build*
 
-${sudo} mkosi --debug --distribution=fedora
+${sudo} mkosi --debug --distribution="${1}"
 mv build build-old
-${sudo} mkosi --debug --distribution=fedora
+${sudo} mkosi --debug --distribution="${1}"
 
 ${sudo} systemd-dissect --mtree build/system.raw > build/mtree
 ${sudo} systemd-dissect --mtree build-old/system.raw > build-old/mtree

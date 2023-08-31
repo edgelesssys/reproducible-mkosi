@@ -27,11 +27,12 @@
       tools = import ./tools/default.nix { inherit pkgs; };
     in
     {
-      devShells."${system}" = {
+      devShells.${system} = {
         mkosiFedora = import ./shells/fedora.nix { inherit pkgs mkosiDev tools; };
         mkosiUbuntu = import ./shells/ubuntu.nix { inherit pkgs mkosiDev tools; };
         mkosiDev = import ./shells/mkosi-dev.nix { inherit pkgs; };
       };
 
+      formatter.${system} = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
     };
 }

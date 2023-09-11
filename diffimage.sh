@@ -2,20 +2,14 @@
 
 set -euo pipefail
 
-distro=$(awk -F= '$1 == "ID" {print $2}' /etc/os-release)
-sudo=""
-if [ "${distro}" = "nixos" ]; then
-    sudo="sudo" # mkosi needs sudo on NixOS
-fi
-
 rm -rf build*
 
-${sudo} mkosi --debug --distribution="${1}"
+mkosi --debug --distribution="${1}"
 mv build build-old
-${sudo} mkosi --debug --distribution="${1}"
+mkosi --debug --distribution="${1}"
 
-${sudo} systemd-dissect --mtree build/system.raw > build/mtree
-${sudo} systemd-dissect --mtree build-old/system.raw > build-old/mtree
+sudo systemd-dissect --mtree build/system.raw > build/mtree
+sudo systemd-dissect --mtree build-old/system.raw > build-old/mtree
 
 for part in "root" "verity" "efi"; do
     extract ${part} build/system.raw build/${part}

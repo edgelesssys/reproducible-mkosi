@@ -50,10 +50,10 @@
 
       mkosiDev = (pkgsWorking.mkosi.overrideAttrs (_: rec {
         src = pkgsWorking.fetchFromGitHub {
-          owner = "systemd";
+          owner = "katexochen";
           repo = "mkosi";
-          rev = "4b776f1cfc498c88468ce7e44050d8b06289f8ac";
-          hash = "sha256-nM7YI4iyaKOESG+Euvd+rtyu5buVQw4AHYywsB98MN4=";
+          rev = "9db8a2f61b7ff0bfbf6226e2e3547c06a734115c"; # v16 + https://github.com/systemd/mkosi/pull/1892
+          hash = "sha256-NDFXD0gvHq6+Enyva668a6k6UFyY9P5nOhvJhwZBNbU=";
         };
       })).override {
         # withQemu = true;

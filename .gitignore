@@ -1,4 +1,5 @@
 .mkosi-*
+mkosi.cache
 build
 build-old
 result

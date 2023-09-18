@@ -43,6 +43,7 @@
     let
       authorizedKeys = {
         katexochen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBLRbdboacxCiIarRD/mdJUoZINJXF/YbsTELlcZNf04 katexochen@remoteBuilder";
+        malt3 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIObVCN/buB1d64ptwqIQrLDGpA2xO8plc/FltqE1oK+D malt3@remoteBuilder";
       };
     in
     flake-utils.lib.eachDefaultSystem
@@ -66,6 +67,7 @@
       in
       {
         devShells = {
+          anywhere = import ./shells/anywhere.nix { pkgs = pkgsUnstable; };
           mkosiFedora = import ./shells/fedora.nix { pkgs = pkgsWorking; inherit mkosiDev tools; };
           mkosiUbuntu = import ./shells/ubuntu.nix { pkgs = pkgsWorking; inherit mkosiDev tools; };
           mkosiDev = import ./shells/mkosi-dev.nix { pkgs = pkgsWorking; };
@@ -89,14 +91,16 @@
         anywhereBuilder is a nixos system to be used with nixos-anywhere on AWS.
 
         nix run github:numtide/nixos-anywhere -- --flake .#anywhereAWS -i ~/.ssh/some_key ec2-user@some_host
+        terraform -chdir=terraform init
+        terraform -chdir=terraform apply -auto-approve
       */
       nixosConfigurations.anywhereAWS = nixpkgsUnstable.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          srvos.nixosModules.hardware-amazon # not compatible with disko
+          # srvos.nixosModules.hardware-amazon # not compatible with disko
           srvos.nixosModules.server
           disko.nixosModules.disko
-          srvos.nixosModules.roles-nix-remote-builder
+          # srvos.nixosModules.roles-nix-remote-builder
           ./systems/anywhere.nix
           { users.users.root.openssh.authorizedKeys.keys = (nixpkgsUnstable.lib.attrValues authorizedKeys); }
         ];

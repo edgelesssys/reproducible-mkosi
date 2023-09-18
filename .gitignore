@@ -3,3 +3,7 @@ mkosi.cache
 build
 build-old
 result
+.terraform*
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars

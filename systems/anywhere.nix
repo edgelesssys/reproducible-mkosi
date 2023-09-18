@@ -3,10 +3,15 @@
   boot = {
     loader.systemd-boot.enable = true;
     initrd.availableKernelModules = [ "nvme" ];
+    # TODO: correctly import ena module
+    # extraModulePackages = [ boot.kernelPackages.ena ];
   };
 
+  systemd.network.enable = true;
+  networking.useDHCP = true;
+
   # debugging
-  # boot.kernelParams = [ "rescu" "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1" ];
+  # boot.kernelParams = [ "rescue" "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1" ];
   # services.getty.autologinUser = "root";
 
   disko.devices.disk.nvme0n1 = {

@@ -100,9 +100,12 @@
           # srvos.nixosModules.hardware-amazon # not compatible with disko
           srvos.nixosModules.server
           disko.nixosModules.disko
-          # srvos.nixosModules.roles-nix-remote-builder
+          srvos.nixosModules.roles-nix-remote-builder
           ./systems/anywhere.nix
-          { users.users.root.openssh.authorizedKeys.keys = (nixpkgsUnstable.lib.attrValues authorizedKeys); }
+          {
+            users.users.root.openssh.authorizedKeys.keys = (nixpkgsUnstable.lib.attrValues authorizedKeys);
+            roles.nix-remote-builder.schedulerPublicKeys = (nixpkgsUnstable.lib.attrValues authorizedKeys);
+          }
         ];
       };
     };

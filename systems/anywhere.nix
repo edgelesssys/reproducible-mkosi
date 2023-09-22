@@ -14,6 +14,10 @@
   # boot.kernelParams = [ "rescue" "systemd.setenv=SYSTEMD_SULOGIN_FORCE=1" ];
   # services.getty.autologinUser = "root";
 
+  environment.systemPackages = with pkgs; [
+    btop
+  ];
+
   disko.devices.disk.nvme0n1 = {
     device = "/dev/nvme0n1";
     type = "disk";
@@ -32,9 +36,21 @@
         root = {
           size = "100%";
           content = {
-            type = "filesystem";
-            format = "ext4";
-            mountpoint = "/";
+            type = "btrfs";
+            extraArgs = [ "-f" ];
+            subvolumes = {
+              "@" = {
+                mountpoint = "/";
+              };
+              "@home" = {
+                mountpoint = "/home";
+                mountOptions = [ "compress=zstd" ];
+              };
+              "@nix" = {
+                mountpoint = "/nix";
+                mountOptions = [ "compress=zstd" "noatime" ];
+              };
+            };
           };
         };
       };

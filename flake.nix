@@ -63,14 +63,14 @@
           # withQemu = true;
         };
 
-        tools = import ./tools/default.nix { pkgs = pkgsWorking; };
+        tools = import ./tools/default.nix { pkgs = pkgsUnstable; };
       in
       {
         devShells = {
           anywhere = import ./shells/anywhere.nix { pkgs = pkgsUnstable; };
-          mkosiFedora = import ./shells/fedora.nix { pkgs = pkgsWorking; inherit mkosiDev tools; };
-          mkosiUbuntu = import ./shells/ubuntu.nix { pkgs = pkgsWorking; inherit mkosiDev tools; };
-          mkosiDev = import ./shells/mkosi-dev.nix { pkgs = pkgsWorking; };
+          mkosiFedora = import ./shells/fedora.nix { pkgs = pkgsUnstable; inherit mkosiDev tools; };
+          mkosiUbuntu = import ./shells/ubuntu.nix { pkgs = pkgsUnstable; inherit mkosiDev tools; };
+          mkosiDev = import ./shells/mkosi-dev.nix { pkgs = pkgsUnstable; };
         };
 
         formatter = nixpkgsUnstable.legacyPackages.${system}.nixpkgs-fmt;

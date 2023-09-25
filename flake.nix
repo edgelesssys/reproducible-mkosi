@@ -50,16 +50,19 @@
         pkgsWorking = import nixpkgsWorking { inherit system; };
         pkgsUnstable = import nixpkgsUnstable { inherit system; };
 
-        mkosiDev = (pkgsWorking.mkosi.overrideAttrs (_: rec {
-          src = pkgsWorking.fetchFromGitHub {
-            owner = "katexochen";
-            repo = "mkosi";
-            rev = "9db8a2f61b7ff0bfbf6226e2e3547c06a734115c"; # v16 + https://github.com/systemd/mkosi/pull/1892
-            hash = "sha256-NDFXD0gvHq6+Enyva668a6k6UFyY9P5nOhvJhwZBNbU=";
-          };
-        })).override {
-          # withQemu = true;
-        };
+        mkosiDev = pkgsWorking.mkosi;
+        mkosiDevFull = pkgsWorking.mkosi-full;
+        # mkosiDev = (pkgsWorking.mkosi.overrideAttrs (_: rec {
+        #   src = pkgsWorking.fetchFromGitHub {
+        #     owner = "katexochen";
+        #     repo = "mkosi";
+        #     rev = "9db8a2f61b7ff0bfbf6226e2e3547c06a734115c";
+        #     hash = "sha256-NDFXD0gvHq6+Enyva668a6k6UFyY9P5nOhvJhwZBNbU=";
+        #   };
+        #   patches = [ ];
+        # })).override {
+        #   # withQemu = true;
+        # };
 
         tools = import ./tools/default.nix { pkgs = pkgsUnstable; };
       in
@@ -68,6 +71,8 @@
           anywhere = import ./shells/anywhere.nix { pkgs = pkgsUnstable; };
           mkosiFedora = import ./shells/fedora.nix { pkgs = pkgsUnstable; inherit mkosiDev tools; };
           mkosiUbuntu = import ./shells/ubuntu.nix { pkgs = pkgsUnstable; inherit mkosiDev tools; };
+          mkosiFedoraQemu = import ./shells/fedora.nix { pkgs = pkgsUnstable; mkosiDev = mkosiDevFull; inherit tools; };
+          mkosiUbuntuQemu = import ./shells/ubuntu.nix { pkgs = pkgsUnstable; mkosiDev = mkosiDevFull; inherit tools; };
           mkosiDev = import ./shells/mkosi-dev.nix { pkgs = pkgsUnstable; };
         };
 

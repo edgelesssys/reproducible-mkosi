@@ -112,3 +112,9 @@ variable "no_reboot" {
   description = "Do not reboot after installation"
   default     = false
 }
+
+variable "region" {
+  type        = string
+  description = "AWS region"
+  default     = "eu-central-1"
+}

@@ -75,18 +75,6 @@
 
         formatter = nixpkgsUnstable.legacyPackages.${system}.nixpkgs-fmt;
       }) // {
-      nixosConfigurations.builderImage = nixpkgsUnstable.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          # srvos.nixosModules.hardware-amazon
-          # srvos.nixosModules.server
-          # srvos.nixosModules.roles-nix-remote-builder
-          nixos-generators.nixosModules.all-formats
-          { users.users.root.openssh.authorizedKeys.keys = (nixpkgsUnstable.lib.attrValues authorizedKeys); }
-        ];
-        specialArgs = { pkgs = nixpkgsUnstable; };
-      };
-
       /*
         anywhereBuilder is a nixos system to be used with nixos-anywhere on AWS.
 

@@ -99,5 +99,14 @@
           }
         ];
       };
+
+      nixConfig = {
+        extra-substituters = [
+          "https://katexochen.cachix.org"
+        ];
+        extra-trusted-public-keys = [
+          "katexochen.cachix.org-1:ScfG6cUxfuZxn3n43fYVqK3ha2TMPLG7kJ52s6PKHqo="
+        ];
+      };
     };
 }

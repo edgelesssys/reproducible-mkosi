@@ -4,9 +4,17 @@ set -euo pipefail
 
 rm -rf build*
 
+#
+# build two images
+#
+
 mkosi --debug --distribution="${1}"
 mv build build-old
 mkosi --debug --distribution="${1}"
+
+#
+# extract all the things
+#
 
 sudo systemd-dissect --mtree build/system.raw > build/mtree
 sudo systemd-dissect --mtree build-old/system.raw > build-old/mtree
@@ -25,6 +33,26 @@ veritysetup dump build-old/verity
 unzstd build/initrd.cpio.zst
 unzstd build-old/initrd.cpio.zst
 
-diff build*/mtree
+#
+# check the result
+#
 
-sha256sum build*/* | rev | sort | rev
+exitcode=0
+
+diff build*/mtree || exitcode=1 && echo
+
+sumsNew=$(sha256sum build/* | rev | sort | rev)
+sumsOld=$(sha256sum build-old/* | rev | sort | rev)
+
+while IFS= read -r new && IFS= read -r old <&3; do
+  sumOld=$(echo "${old}" | cut -d' ' -f1)
+  sumNew=$(echo "${new}" | cut -d' ' -f1)
+  if [[ "${sumOld}" != "${sumNew}" ]]; then
+    echo "${new}"
+    echo "${old}"
+    echo
+    exitcode=1
+  fi
+done <<< "${sumsNew}" 3<<< "${sumsOld}"
+
+exit "${exitcode}"

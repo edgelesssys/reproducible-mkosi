@@ -16,7 +16,9 @@ mkosi --debug --distribution="${1}"
 # extract all the things
 #
 
+# shellcheck disable=SC2024
 sudo systemd-dissect --mtree build/system.raw > build/mtree
+# shellcheck disable=SC2024
 sudo systemd-dissect --mtree build-old/system.raw > build-old/mtree
 
 for part in "root" "verity" "efi"; do

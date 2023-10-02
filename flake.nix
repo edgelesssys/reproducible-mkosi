@@ -66,10 +66,14 @@
           # withQemu = true;
         };
 
-        tools = import ./tools/default.nix { pkgs = pkgsUnstable; };
+        tools = import ./tools/default.nix { pkgs = pkgsUnstable; inherit mkosiDev; };
       in
       {
-        packages.mkosi-nightly = mkosiNightly;
+        packages = {
+          mkosi-nightly = mkosiNightly;
+          extract = tools.extract;
+          diffimage = tools.diffimage;
+        };
 
         devShells = {
           anywhere = import ./shells/anywhere.nix { pkgs = pkgsUnstable; };

@@ -2,9 +2,9 @@
   description = "Build fedora image with mkosi";
 
   inputs = {
-    nixpkgsWorking = {
-      url = "github:katexochen/nixpkgs/working";
-    };
+    # nixpkgsWorking = {
+    #   url = "github:katexochen/nixpkgs/working";
+    # };
     nixpkgsUnstable = {
       url = "github:nixos/nixpkgs/nixos-unstable";
     };
@@ -30,7 +30,7 @@
 
   outputs =
     { self
-    , nixpkgsWorking
+      # , nixpkgsWorking
     , nixpkgsUnstable
     , nixpkgsSrvos
     , nixos-generators
@@ -47,11 +47,11 @@
     flake-utils.lib.eachDefaultSystem
       (system:
       let
-        pkgsWorking = import nixpkgsWorking { inherit system; };
+        # pkgsWorking = import nixpkgsWorking { inherit system; };
         pkgsUnstable = import nixpkgsUnstable { inherit system; };
 
-        mkosiDev = pkgsWorking.mkosi;
-        mkosiDevFull = pkgsWorking.mkosi-full;
+        mkosiDev = pkgsUnstable.mkosi;
+        mkosiDevFull = pkgsUnstable.mkosi-full;
         # mkosiDev = (pkgsWorking.mkosi.overrideAttrs (_: rec {
         #   src = pkgsWorking.fetchFromGitHub {
         #     owner = "katexochen";

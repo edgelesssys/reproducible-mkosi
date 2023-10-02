@@ -48,4 +48,4 @@ jobs:
 
       - name: Check ${{ matrix.distro }} image reproducibility
         run:
-          nix develop .#mkosi-${{ matrix.distro }}-nightly --command bash -c './diffimage.sh ${{ matrix.distro }}'
+          nix develop .#mkosi-${{ matrix.distro }}-nightly --command bash -c 'nix run .#diffimage ${{ matrix.distro }}'

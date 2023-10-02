@@ -52,21 +52,25 @@
 
         mkosiDev = pkgsUnstable.mkosi;
         mkosiDevFull = pkgsUnstable.mkosi-full;
-        # mkosiDev = (pkgsWorking.mkosi.overrideAttrs (_: rec {
-        #   src = pkgsWorking.fetchFromGitHub {
-        #     owner = "katexochen";
-        #     repo = "mkosi";
-        #     rev = "9db8a2f61b7ff0bfbf6226e2e3547c06a734115c";
-        #     hash = "sha256-NDFXD0gvHq6+Enyva668a6k6UFyY9P5nOhvJhwZBNbU=";
-        #   };
-        #   patches = [ ];
-        # })).override {
-        #   # withQemu = true;
-        # };
+        mkosiNightly = (pkgsUnstable.mkosi.overrideAttrs (_: rec {
+          version = "unstable-2023-10-02";
+          src = pkgsUnstable.fetchFromGitHub {
+            owner = "systemd";
+            repo = "mkosi";
+            rev = "6c393ce288c47405eba08db4f59ce7e7dd9fd5b3";
+            # Using sha256 here so it can be updated by update-nix-fetchgit.
+            sha256 = "1h03axq3n56pnka8v62rbnhvf94zzkyq3slwj4ijgqsvlx36jr51";
+          };
+          patches = [ ];
+        })).override {
+          # withQemu = true;
+        };
 
         tools = import ./tools/default.nix { pkgs = pkgsUnstable; };
       in
       {
+        packages.mkosi-nightly = mkosiNightly;
+
         devShells = {
           anywhere = import ./shells/anywhere.nix { pkgs = pkgsUnstable; };
           mkosiFedora = import ./shells/fedora.nix { pkgs = pkgsUnstable; inherit mkosiDev tools; };
@@ -74,6 +78,8 @@
           mkosiFedoraQemu = import ./shells/fedora.nix { pkgs = pkgsUnstable; mkosiDev = mkosiDevFull; inherit tools; };
           mkosiUbuntuQemu = import ./shells/ubuntu.nix { pkgs = pkgsUnstable; mkosiDev = mkosiDevFull; inherit tools; };
           mkosiDev = import ./shells/mkosi-dev.nix { pkgs = pkgsUnstable; };
+          mkosi-fedora-nightly = import ./shells/fedora.nix { pkgs = pkgsUnstable; mkosiDev = mkosiNightly; inherit tools; };
+          mkosi-ubuntu-nightly = import ./shells/ubuntu.nix { pkgs = pkgsUnstable; mkosiDev = mkosiNightly; inherit tools; };
         };
 
         formatter = nixpkgsUnstable.legacyPackages.${system}.nixpkgs-fmt;

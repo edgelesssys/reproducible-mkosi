@@ -22,21 +22,6 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v22
 
-      - name: Keep path for sudo so nix shell works
-        run: |
-          set -x
-          sudo groupadd nixusers
-          sudo usermod -a -G nixusers $USER
-          newgrp nixusers
-          groups $USER
-          echo "Defaults       exempt_group=nixusers" | sudo tee -a /etc/sudoers.d/nixusers
-          sudo chmod 0440 /etc/sudoers.d/nixusers
-          sudo chmod 0440 /etc/sudoers.d/runner
-          sudo cat /etc/sudoers.d/runner
-          sudo cat /etc/sudoers.d/nixusers
-          sudo cat /etc/sudoers
-          sudo visudo -c
-
       - name: Upate flake
         run: nix flake update
 

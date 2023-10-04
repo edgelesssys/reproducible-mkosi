@@ -22,9 +22,9 @@ fi
 #
 
 # shellcheck disable=SC2024
-sudo -E systemd-dissect --mtree build-a/system.raw > build-a/mtree
+sudo env PATH="$PATH" systemd-dissect --mtree build-a/system.raw > build-a/mtree
 # shellcheck disable=SC2024
-sudo -E systemd-dissect --mtree build-b/system.raw > build-b/mtree
+sudo env PATH="$PATH" systemd-dissect --mtree build-b/system.raw > build-b/mtree
 
 for part in "root" "verity" "efi"; do
     extract ${part} build-a/system.raw build-a/${part}

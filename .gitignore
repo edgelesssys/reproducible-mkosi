@@ -1,5 +1,6 @@
 .mkosi-*
-mkosi.cache
+mkosi.cache/*
+!mkosi.cache/.gitkeep
 build
 build-old
 build-a

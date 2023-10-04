@@ -48,9 +48,13 @@ unzstd build-b/initrd.cpio.zst
 # check the result
 #
 
+echo
 exitcode=0
 
-diff build*/mtree || exitcode=1 && echo
+diff build*/initrd.manifest || (exitcode=1 && echo)
+diff build*/system.manifest || (exitcode=1 && echo)
+
+diff build*/mtree || (exitcode=1 && echo)
 
 sumsA=$(sha256sum build-a/* | rev | sort | rev)
 sumsB=$(sha256sum build-b/* | rev | sort | rev)

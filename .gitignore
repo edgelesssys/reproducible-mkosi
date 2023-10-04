@@ -2,6 +2,8 @@
 mkosi.cache
 build
 build-old
+build-a
+build-b
 result
 .terraform*
 terraform.tfstate

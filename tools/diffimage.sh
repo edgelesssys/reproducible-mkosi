@@ -8,32 +8,37 @@ rm -rf build*
 # build two images
 #
 
-mkosi --debug --distribution="${1}"
-mv build build-old
-mkosi --debug --distribution="${1}"
+mkosi --debug --distribution="${1}" --output-dir="build-a"
+if [[ ! -d "build-a" ]]; then
+    mv build build-a
+fi
+mkosi --debug --distribution="${1}" --output-dir="build-b"
+if [[ ! -d "build-b" ]]; then
+    mv build build-b
+fi
 
 #
 # extract all the things
 #
 
 # shellcheck disable=SC2024
-sudo systemd-dissect --mtree build/system.raw > build/mtree
+sudo -E systemd-dissect --mtree build-a/system.raw > build-a/mtree
 # shellcheck disable=SC2024
-sudo systemd-dissect --mtree build-old/system.raw > build-old/mtree
+sudo -E systemd-dissect --mtree build-b/system.raw > build-b/mtree
 
 for part in "root" "verity" "efi"; do
-    extract ${part} build/system.raw build/${part}
-    extract ${part} build-old/system.raw build-old/${part}
+    extract ${part} build-a/system.raw build-a/${part}
+    extract ${part} build-b/system.raw build-b/${part}
 done
 
-objcopy -O binary --only-section=.cmdline build/system.efi build/cmdline
-objcopy -O binary --only-section=.cmdline build-old/system.efi build-old/cmdline
+objcopy -O binary --only-section=.cmdline build-a/system.efi build-a/cmdline
+objcopy -O binary --only-section=.cmdline build-b/system.efi build-b/cmdline
 
-veritysetup dump build/verity
-veritysetup dump build-old/verity
+veritysetup dump build-a/verity
+veritysetup dump build-b/verity
 
-unzstd build/initrd.cpio.zst
-unzstd build-old/initrd.cpio.zst
+unzstd build-a/initrd.cpio.zst
+unzstd build-b/initrd.cpio.zst
 
 #
 # check the result
@@ -43,18 +48,18 @@ exitcode=0
 
 diff build*/mtree || exitcode=1 && echo
 
-sumsNew=$(sha256sum build/* | rev | sort | rev)
-sumsOld=$(sha256sum build-old/* | rev | sort | rev)
+sumsA=$(sha256sum build-a/* | rev | sort | rev)
+sumsB=$(sha256sum build-b/* | rev | sort | rev)
 
 while IFS= read -r new && IFS= read -r old <&3; do
-  sumOld=$(echo "${old}" | cut -d' ' -f1)
-  sumNew=$(echo "${new}" | cut -d' ' -f1)
-  if [[ "${sumOld}" != "${sumNew}" ]]; then
+  sumA=$(echo "${old}" | cut -d' ' -f1)
+  sumB=$(echo "${new}" | cut -d' ' -f1)
+  if [[ "${sumA}" != "${sumB}" ]]; then
     echo "${new}"
     echo "${old}"
     echo
     exitcode=1
   fi
-done <<< "${sumsNew}" 3<<< "${sumsOld}"
+done <<< "${sumsA}" 3<<< "${sumsB}"
 
 exit "${exitcode}"

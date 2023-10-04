@@ -17,6 +17,10 @@ if [[ ! -d "build-b" ]]; then
     mv build build-b
 fi
 
+# remove symlinks
+find build-a -type l -delete
+find build-b -type l -delete
+
 #
 # extract all the things
 #

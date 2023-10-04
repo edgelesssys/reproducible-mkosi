@@ -49,3 +49,17 @@ jobs:
       - name: Check ${{ matrix.distro }} image reproducibility
         run:
           nix develop .#mkosi-${{ matrix.distro }}-nightly --command bash -c 'nix run .#diffimage ${{ matrix.distro }}'
+
+      - name: Upload binary artifacts A
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ matrix.distro }}-A"
+          path: "build-a/*"
+
+      - name: Upload binary artifacts B
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ matrix.distro }}-B"
+          path: "build-b/*"

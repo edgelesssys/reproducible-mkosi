@@ -1,4 +1,4 @@
-{ pkgs, mkosiDev, extract }:
+{ pkgs, extract }:
 pkgs.writeShellApplication {
   name = "diffimage";
   runtimeInputs = with pkgs; [
@@ -11,7 +11,7 @@ pkgs.writeShellApplication {
     systemd
     diffutils
   ] ++ [
-    mkosiDev
+    # mkosi # use mkosi from environment, so different versions can be used.
     extract
   ];
   text = (builtins.readFile ./diffimage.sh);

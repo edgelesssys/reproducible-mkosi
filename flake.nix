@@ -66,7 +66,7 @@
           # withQemu = true;
         };
 
-        tools = import ./tools/default.nix { pkgs = pkgsUnstable; inherit mkosiDev; };
+        tools = import ./tools/default.nix { pkgs = pkgsUnstable; };
       in
       {
         packages = {

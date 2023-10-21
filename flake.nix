@@ -40,7 +40,7 @@
     }:
     let
       authorizedKeys = {
-        katexochen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBLRbdboacxCiIarRD/mdJUoZINJXF/YbsTELlcZNf04 katexochen@remoteBuilder";
+        katexochen = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDcTVEfgXMnzE6iRJM8KWsrPHCXIgxqQNMfU+RmPM25g katexochen@remoteBuilder";
         malt3 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIObVCN/buB1d64ptwqIQrLDGpA2xO8plc/FltqE1oK+D malt3@remoteBuilder";
       };
     in

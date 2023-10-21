@@ -26,7 +26,7 @@ resource "aws_security_group_rule" "egress" {
 
 resource "aws_key_pair" "ec2_key" {
   key_name   = "deployer-key-${local.uid}"
-  public_key = var.install_ssh_pub
+  public_key = file(var.install_ssh_pub_path)
 }
 
 data "aws_ami" "amazon_linux" {
@@ -85,7 +85,7 @@ module "install" {
   target_port                 = var.target_port
   nixos_partitioner           = module.partitioner-build.result.out
   nixos_system                = module.system-build.result.out
-  ssh_private_key             = var.install_ssh_key
+  ssh_private_key             = file(var.install_ssh_key_path)
   debug_logging               = var.debug_logging
   stop_after_disko            = var.stop_after_disko
   extra_files_script          = var.extra_files_script
@@ -105,7 +105,7 @@ module "nixos-rebuild" {
 
   source          = "git::https://github.com/nix-community/nixos-anywhere.git//terraform/nixos-rebuild?ref=bd3f79f11d030d9fa2cf18d3ad096dfdc98abcc8"
   nixos_system    = module.system-build.result.out
-  ssh_private_key = var.deployment_ssh_key
+  ssh_private_key = file(var.deployment_ssh_key_path)
   target_host     = module.ec2_instance.public_ip
   target_user     = var.target_user
 }

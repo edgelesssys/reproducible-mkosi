@@ -27,7 +27,7 @@ variable "file" {
 variable "install_user" {
   type        = string
   description = "SSH user used to connect to the target_host, before installing NixOS. If null than the value of `target_host` is used"
-  default     = null
+  default     = "ec2-user"
 }
 
 variable "target_user" {
@@ -48,30 +48,30 @@ variable "instance_id" {
   default     = null
 }
 
-variable "install_ssh_key" {
+variable "install_ssh_key_path" {
   type        = string
   description = "Content of private key used to connect to the target_host during initial installation"
   # sensitive   = true
-  default = null
+  default = "~/.ssh/remote_builder"
 }
 
-variable "deployment_ssh_key" {
+variable "deployment_ssh_key_path" {
   type        = string
   description = "Content of private key used to deploy to the target_host after initial installation. To ensure maximum security, it is advisable to connect to your host using ssh-agent instead of relying on this variable"
   # sensitive   = true
-  default = null
+  default = "~/.ssh/remote_builder"
 }
 
-variable "install_ssh_pub" {
+variable "install_ssh_pub_path" {
   type        = string
   description = "Content of public key used to connect to the target_host during initial installation"
-  default     = null
+  default     = "~/.ssh/remote_builder.pub"
 }
 
-variable "deployment_ssh_pub" {
+variable "deployment_ssh_pub_path" {
   type        = string
   description = "Content of public key used to deploy to the target_host after initial installation"
-  default     = null
+  default     = "~/.ssh/remote_builder.pub"
 }
 
 variable "debug_logging" {

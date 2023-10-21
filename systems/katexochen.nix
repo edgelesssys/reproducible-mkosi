@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   users.users.katexochen = {
     isNormalUser = true;
@@ -7,6 +7,12 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDcTVEfgXMnzE6iRJM8KWsrPHCXIgxqQNMfU+RmPM25g katexochen@remoteBuilder"
     ];
   };
+
+  environment.systemPackages = with pkgs; [
+    diskonaut
+    git
+    starship
+  ];
 
   virtualisation.docker.enable = true;
 }

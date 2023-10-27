@@ -97,6 +97,7 @@
       */
       nixosConfigurations.anywhereAWS = nixpkgsUnstable.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { nixpkgs = nixpkgsUnstable; };
         modules = [
           # srvos.nixosModules.hardware-amazon # not compatible with disko
           srvos.nixosModules.server

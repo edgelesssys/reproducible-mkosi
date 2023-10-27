@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ nixpkgs, config, pkgs, lib, ... }:
 {
   users.users.katexochen = {
     isNormalUser = true;
@@ -12,7 +12,14 @@
     diskonaut
     git
     starship
+    go
+    gotools
   ];
 
   virtualisation.docker.enable = true;
+
+  nix = {
+    registry.nixpkgs.flake = nixpkgs;
+    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+  };
 }

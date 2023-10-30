@@ -5,7 +5,6 @@ pkgs.writeShellApplication {
     # util-linux
     cryptsetup
     coreutils
-    mkosi
     binutils
     zstd
     systemd

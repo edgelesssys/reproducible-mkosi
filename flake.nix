@@ -6,7 +6,7 @@
     #   url = "github:katexochen/nixpkgs/working";
     # };
     nixpkgsUnstable = {
-      url = "github:nixos/nixpkgs/nixos-unstable";
+      url = "github:nixos/nixpkgs/nixpkgs-unstable";
     };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
@@ -52,14 +52,14 @@
 
         mkosiDev = pkgsUnstable.mkosi;
         mkosiDevFull = pkgsUnstable.mkosi-full;
-        mkosiNightly = (pkgsUnstable.mkosi.overrideAttrs (_: rec {
-          version = "unstable-2023-10-02";
+        mkosiNightly = (pkgsUnstable.mkosi.overrideAttrs (oldAttrs: rec {
+          version = "unstable-2023-10-30";
           src = pkgsUnstable.fetchFromGitHub {
             owner = "systemd";
             repo = "mkosi";
-            rev = "6c393ce288c47405eba08db4f59ce7e7dd9fd5b3";
+            rev = "ea3e947eb89940c08bc1fad3a933aa3e05c16511";
             # Using sha256 here so it can be updated by update-nix-fetchgit.
-            sha256 = "1h03axq3n56pnka8v62rbnhvf94zzkyq3slwj4ijgqsvlx36jr51";
+            sha256 = "sha256-wadAHOAo1t7HjUZ+RJ3UvSG0vGIlrZnpvT/aneo/8IE=";
           };
           patches = [ ];
         })).override {

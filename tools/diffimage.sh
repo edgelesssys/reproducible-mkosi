@@ -8,14 +8,11 @@ rm -rf build*
 # build two images
 #
 
-mkosi --debug --distribution="${1}" --output-dir="build-a"
-if [[ ! -d "build-a" ]]; then
-    mv build build-a
-fi
-mkosi --debug --distribution="${1}" --output-dir="build-b"
-if [[ ! -d "build-b" ]]; then
-    mv build build-b
-fi
+mkosi --debug --distribution="${1}"
+mv build build-a
+
+mkosi --debug --distribution="${1}"
+mv build build-b
 
 # remove symlinks
 find build-a -type l -delete

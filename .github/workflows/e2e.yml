@@ -31,9 +31,15 @@ jobs:
       - name: Build mkosi-nightly
         run: nix build .#mkosi-nightly
 
+      - uses: nicknovitski/nix-develop@v1.0.0
+        with:
+          arguments: ".#mkosi-${{ matrix.distro }}-nightly"
+
+      - name: Print mkosi store path
+        run: command -v mkosi
+
       - name: Check ${{ matrix.distro }} image reproducibility
-        run:
-          nix develop .#mkosi-${{ matrix.distro }}-nightly --command bash -c 'nix run .#diffimage ${{ matrix.distro }}'
+        run: nix run .#diffimage ${{ matrix.distro }}
 
       - name: Upload binary artifacts A
         if: always()

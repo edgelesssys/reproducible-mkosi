@@ -16,9 +16,6 @@
       url = "github:numtide/srvos";
       inputs.nixpkgs.follows = "nixpkgsUnstable";
     };
-    nixpkgsSrvos = {
-      follows = "srvos/nixpkgs";
-    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgsUnstable";
@@ -32,7 +29,6 @@
     { self
       # , nixpkgsWorking
     , nixpkgsUnstable
-    , nixpkgsSrvos
     , nixos-generators
     , srvos
     , disko

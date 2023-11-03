@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nixos-runner-test
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nixos-runner
+  namespace: nixos-runner-test
+spec:
+  containers:
+    - name: nixos-runner
+      image: ghcr.io/katexochen/nixos-gh-runner:latest
+      imagePullPolicy: Always
+      command: ["/init"]
+      securityContext:
+        privileged: true

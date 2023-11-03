@@ -69,6 +69,26 @@
           mkosi-nightly = mkosiNightly;
           extract = tools.extract;
           diffimage = tools.diffimage;
+          ci-container = nixos-generators.nixosGenerate {
+            pkgs = pkgsUnstable;
+            system = "x86_64-linux";
+            format = "docker";
+            modules = [
+              ({ config, pkgs, ... }: {
+                networking.resolvconf.enable = false;
+                networking.dhcpcd.enable = false;
+                networking.useDHCP = false;
+                services.nscd.enableNsncd = false;
+                nix = {
+                  registry = { nixpkgs = { flake = nixpkgsUnstable; }; };
+                  nixPath = pkgs.lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+                  settings = {
+                    experimental-features = [ "nix-command" "flakes" ];
+                  };
+                };
+              })
+            ];
+          };
         };
 
         devShells = {

@@ -38,8 +38,14 @@ objcopy -O binary --only-section=.cmdline build-b/system.efi build-b/cmdline
 veritysetup dump build-a/verity
 veritysetup dump build-b/verity
 
-unzstd build-a/initrd.cpio.zst
-unzstd build-b/initrd.cpio.zst
+if [[ -f build-a/initrd.cpio.zstd ]]; then
+    unzstd build-a/initrd.cpio.zstd
+    unzstd build-b/initrd.cpio.zstd
+else
+    # for mkosi < 19
+    unzstd build-a/initrd.cpio.zst
+    unzstd build-b/initrd.cpio.zst
+fi
 
 #
 # check the result

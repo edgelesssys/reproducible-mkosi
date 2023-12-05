@@ -1,8 +1,9 @@
 { pkgs }:
 let
-  extract = pkgs.callPackage ./extract.nix { };
+  callPackage = pkgs.lib.callPackageWith (pkgs // tools);
+  tools = {
+    extract = callPackage ./extract.nix { };
+    diffimage = callPackage ./diffimage.nix { };
+  };
 in
-{
-  inherit extract;
-  diffimage = pkgs.callPackage ./diffimage.nix { inherit extract; };
-}
+tools

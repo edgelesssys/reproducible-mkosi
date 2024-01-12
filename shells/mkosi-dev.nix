@@ -1,4 +1,5 @@
-{ pkgs, ... }:
+{ pkgs }:
+
 let
   testDeps = with pkgs; [
     (python3.withPackages
@@ -12,6 +13,7 @@ let
       ]))
     nodePackages_latest.pyright
   ];
+
   testScript = pkgs.writeShellApplication {
     name = "mkosi-tests";
     runtimeInputs = testDeps;
@@ -27,6 +29,7 @@ let
     '';
   };
 in
+
 pkgs.mkShell {
   buildInputs = testDeps ++ [ testScript ];
 }

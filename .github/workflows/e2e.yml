@@ -26,7 +26,7 @@ jobs:
         run: nix flake update
 
       - name: Update mkosi
-        run: nix shell nixpkgs#update-nix-fetchgit --command update-nix-fetchgit -v flake.nix
+        run: nix shell nixpkgs#nix-update -- --version=branch=main --flake mkosi-nightly
 
       - name: Build mkosi-nightly
         run: nix build .#mkosi-nightly

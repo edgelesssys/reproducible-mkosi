@@ -13,41 +13,40 @@
     }:
     flake-utils.lib.eachDefaultSystem (system:
     let
-      pkgsUnstable = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs { inherit system; };
 
-      mkosiDev = pkgsUnstable.mkosi;
-      mkosiDevFull = pkgsUnstable.mkosi-full;
-      mkosiNightly = (pkgsUnstable.mkosi.overrideAttrs (oldAttrs: rec {
+      # mkosi, built from main. Used for the daily e2e test.
+      mkosi-nightly = (pkgs.mkosi.overrideAttrs (oldAttrs: rec {
         version = "unstable-2023-10-30";
-        src = pkgsUnstable.fetchFromGitHub {
+        src = pkgs.fetchFromGitHub {
           owner = "systemd";
           repo = "mkosi";
           rev = "ea3e947eb89940c08bc1fad3a933aa3e05c16511";
           # Using sha256 here so it can be updated by update-nix-fetchgit.
           sha256 = "sha256-wadAHOAo1t7HjUZ+RJ3UvSG0vGIlrZnpvT/aneo/8IE=";
         };
-        patches = [ ];
       })).override {
+        # Uncomment the following line to build mkosi from main with QEMU support.
         # withQemu = true;
       };
 
-      tools = import ./tools/default.nix { pkgs = pkgsUnstable; };
+      tools = import ./tools/default.nix { inherit pkgs; };
     in
     {
       packages = {
-        mkosi-nightly = mkosiNightly;
+        inherit mkosi-nightly;
         extract = tools.extract;
         diffimage = tools.diffimage;
       };
 
       devShells = {
-        mkosiFedora = import ./shells/fedora.nix { pkgs = pkgsUnstable; inherit mkosiDev tools; };
-        mkosiUbuntu = import ./shells/ubuntu.nix { pkgs = pkgsUnstable; inherit mkosiDev tools; };
-        mkosiFedoraQemu = import ./shells/fedora.nix { pkgs = pkgsUnstable; mkosiDev = mkosiDevFull; inherit tools; };
-        mkosiUbuntuQemu = import ./shells/ubuntu.nix { pkgs = pkgsUnstable; mkosiDev = mkosiDevFull; inherit tools; };
-        mkosiDev = import ./shells/mkosi-dev.nix { pkgs = pkgsUnstable; };
-        mkosi-fedora-nightly = import ./shells/fedora.nix { pkgs = pkgsUnstable; mkosiDev = mkosiNightly; inherit tools; };
-        mkosi-ubuntu-nightly = import ./shells/ubuntu.nix { pkgs = pkgsUnstable; mkosiDev = mkosiNightly; inherit tools; };
+        mkosi-fedora = import ./shells/fedora.nix { inherit pkgs tools; };
+        mkosi-ubuntu = import ./shells/ubuntu.nix { inherit pkgs tools; };
+        mkosi-fedora-qemu = import ./shells/fedora.nix { inherit pkgs tools; mkosi = pkgs.mkosi-full; };
+        mkosi-ubuntu-qemu = import ./shells/ubuntu.nix { inherit pkgs tools; mkosi = pkgs.mkosi-full; };
+        mkosi-fedora-nightly = import ./shells/fedora.nix { inherit pkgs tools; mkosi = mkosi-nightly; };
+        mkosi-ubuntu-nightly = import ./shells/ubuntu.nix { inherit pkgs tools; mkosi = mkosi-nightly; };
+        mkosi-dev = import ./shells/mkosi-dev.nix { inherit pkgs; };
       };
 
       formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;

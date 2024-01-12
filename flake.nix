@@ -17,13 +17,12 @@
 
       # mkosi, built from main. Used for the daily e2e test.
       mkosi-nightly = (pkgs.mkosi.overrideAttrs (oldAttrs: rec {
-        version = "unstable-2023-10-30";
+        version = "unstable-2024-01-11";
         src = pkgs.fetchFromGitHub {
           owner = "systemd";
           repo = "mkosi";
-          rev = "ea3e947eb89940c08bc1fad3a933aa3e05c16511";
-          # Using sha256 here so it can be updated by update-nix-fetchgit.
-          sha256 = "sha256-wadAHOAo1t7HjUZ+RJ3UvSG0vGIlrZnpvT/aneo/8IE=";
+          rev = "0a4e1276af191e64c57cd3c1ab50271ab3b706c8";
+          hash = "sha256-vcXa+oc+5hpWPQvzloNPTM8ra7ShUTLtBiQjqoAB09Y=";
         };
       })).override {
         # Uncomment the following line to build mkosi from main with QEMU support.

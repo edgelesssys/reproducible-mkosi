@@ -34,20 +34,35 @@
     {
       packages = {
         inherit mkosi-nightly;
+
+        # extract extracts partions from a disk image based on the partition table.
         extract = tools.extract;
+
+        # diffimage builds two mkosi images, extracts and compares them.
         diffimage = tools.diffimage;
       };
 
+      # Activate a devShell using `nix develop .#<shell-name>`.
       devShells = {
+        # Build environments for reproducible mkosi builds.
+        # Contain mkosi and tools used by mkosi to build images.
         mkosi-fedora = import ./shells/fedora.nix { inherit pkgs tools; };
         mkosi-ubuntu = import ./shells/ubuntu.nix { inherit pkgs tools; };
+
+        # Build environments for reproducible mkosi builds with QEMU support,
+        # enabling `mkosi qemu` to start the built image in a local VM.
         mkosi-fedora-qemu = import ./shells/fedora.nix { inherit pkgs tools; mkosi = pkgs.mkosi-full; };
         mkosi-ubuntu-qemu = import ./shells/ubuntu.nix { inherit pkgs tools; mkosi = pkgs.mkosi-full; };
+
+        # Build environments using the nightly mkosi builds (for testing).
         mkosi-fedora-nightly = import ./shells/fedora.nix { inherit pkgs tools; mkosi = mkosi-nightly; };
         mkosi-ubuntu-nightly = import ./shells/ubuntu.nix { inherit pkgs tools; mkosi = mkosi-nightly; };
+
+        # Development envionment for hacking on mkosi.
         mkosi-dev = import ./shells/mkosi-dev.nix { inherit pkgs; };
       };
 
+      # Run `nix fmt` to format the Nix code.
       formatter = nixpkgs.legacyPackages.${system}.nixpkgs-fmt;
     });
 }

@@ -5,7 +5,7 @@ build
 build-old
 build-a
 build-b
-result
+result*
 .terraform*
 terraform.tfstate
 terraform.tfstate.backup

@@ -9,7 +9,11 @@ This repository shows how to use [Nix](https://nixos.org/) to pin mkosi and requ
 tools and build bit-by-bit reproducible OS images.
 
 
-## History of getting and keeping this reproducible
+### History of getting and keeping this reproducible
+
+Hours of debugging went into making this fully reproducible, and there are still things left to do,
+especially regarding the handling of packages pulled in by the package manger of the target distro.
+In the following, we list some work we did upstream that explicitly fix reproducibility issues.
 
 - [**systemd/mkosi** propagate SOURCE_DATE_EPOCH when calling systemd-repart](https://github.com/systemd/mkosi/pull/1834)
 - [**systemd/mkosi** add config setting seed to set systemd-repart --seed](https://github.com/systemd/mkosi/pull/1837)

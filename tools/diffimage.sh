@@ -54,10 +54,17 @@ fi
 echo
 exitcode=0
 
-diff build*/initrd.manifest || (exitcode=1 && echo)
-diff build*/system.manifest || (exitcode=1 && echo)
+touch build-{a,b}/{initrd,system}.manifest
+if ! diff build*/initrd.manifest; then
+  exitcode=1
+fi
+if ! diff build*/system.manifest; then
+  exitcode=1
+fi
 
-diff build*/mtree || (exitcode=1 && echo)
+if ! diff build*/mtree; then
+  exitcode=1
+fi
 
 sumsA=$(sha256sum build-a/* | rev | sort | rev)
 sumsB=$(sha256sum build-b/* | rev | sort | rev)

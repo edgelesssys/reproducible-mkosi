@@ -9,6 +9,27 @@ This repository shows how to use [Nix](https://nixos.org/) to pin mkosi and requ
 tools and build bit-by-bit reproducible OS images.
 
 
+### Usage
+
+1. Clone the repository
+    ```shell-session
+    git clone https://github.com/edgelesssys/reproducible-mkosi
+    cd reproducible-mkosi
+    ```
+2. Install nix (we recommend the [determinate systems installer](https://github.com/DeterminateSystems/nix-installer))
+3. Enter a shell with mkosi and package manager tools for Fedora or Ubuntu
+    ```shell-session
+    nix develop .#mkosi-fedora
+    # or
+    nix develop .#mkosi-ubuntu
+    ```
+4. Perform two builds and compare the output
+    ```shell-session
+    nix run .#diffimage fedora
+    # or
+    nix run .#diffimage ubuntu
+    ```
+
 ### History of getting and keeping this reproducible
 
 Hours of debugging went into making this fully reproducible, and there are still things left to do,

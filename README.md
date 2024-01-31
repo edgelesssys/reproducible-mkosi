@@ -46,3 +46,8 @@ In the following, we list some work we did upstream that explicitly fix reproduc
 - [**systemd/systemd** mkfs-util: propagate SOURCE_DATE_EPOCH to mcopy](https://github.com/systemd/systemd/pull/29000)
 - [**authselect/authselect** remove timestamp from generated files](https://github.com/authselect/authselect/pull/350)
 - [**NixOS/nixpkgs** dosfstools: backport reproducible builds patch](https://github.com/NixOS/nixpkgs/pull/252282)
+
+### Open tasks
+
+- [ ] Pin and archive rpm/deb packages
+- [ ] Build more parts of the CVM TCB (firmware, kernel, packages from source)

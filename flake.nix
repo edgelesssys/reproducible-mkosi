@@ -16,14 +16,15 @@
       pkgs = import nixpkgs { inherit system; };
 
       # mkosi, built from main. Used for the daily e2e test.
-      mkosi-nightly = (pkgs.mkosi.overrideAttrs (oldAttrs: rec {
-        version = "unstable-2024-01-29";
+      mkosi-nightly = (pkgs.mkosi.overrideAttrs (oldAttrs: {
+        version = "unstable-2024-02-02";
         src = pkgs.fetchFromGitHub {
           owner = "systemd";
           repo = "mkosi";
-          rev = "252db4ea3612f76555d368149ac50bc1a80df298";
-          hash = "sha256-pKmiqS1cA0bI2AhQ3amB0mTJg45VpTrxLeK8CuroHaY=";
+          rev = "d3b035a1e1cef4f744d982b6187cbfd07894dd5b";
+          hash = "sha256-lS9RBmt2RUpbCYD/5nuTD5MZudl31J2c+uFWvq+re2Q=";
         };
+        patches = [ ];
       })).override {
         # Uncomment the following line to build mkosi from main with QEMU support.
         # withQemu = true;
